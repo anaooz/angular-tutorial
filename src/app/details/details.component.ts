@@ -44,6 +44,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
   `,
   styleUrls: ['./details.component.css'],
 })
+
 export class DetailsComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   housingService = inject(HousingService);
@@ -53,10 +54,14 @@ export class DetailsComponent {
     lastName: new FormControl(''),
     email: new FormControl(''),
   });
+
   constructor() {
     const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
-    this.housingLocation = this.housingService.getHousingLocationById(housingLocationId);
+    this.housingService.getHousingLocationById(housingLocationId).then((housingLocation) => {
+      this.housingLocation = housingLocation;
+    });
   }
+
   submitApplication() {
     this.housingService.submitApplication(
       this.applyForm.value.firstName ?? '',
